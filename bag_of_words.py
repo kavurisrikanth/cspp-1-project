@@ -90,10 +90,14 @@ def bag_driver(cur_dir):
 
     for i in range(len(file_list)):
         for j in range(len(file_list)):
+            # print(angles)
+
+            if i == len(angles):
+                angles.append([])
             try:
                 angles[i].append(angles[j][i])
             except:
-                angles.append([])
+
                 if i == j:
                     # Comparing a file with itself makes no sense.
                     angles[i].append(-1)
@@ -103,6 +107,9 @@ def bag_driver(cur_dir):
                 if (angles[i][j] >= (70/100) * vecs[i].length) and i != j:
                     results.append((file_list[i], file_list[j]))
 
+    # for item in angles:
+    #     if len(item) == 0:
+    #         angles.remove(item)
     print(angles)
 
     for res in results:
