@@ -5,13 +5,25 @@ Does all file operations required for the plagiarism detector.
 """
 
 import datetime
+import os
 
-def read_from_directory(loc):
+
+def get_files_in_dir(loc):
     '''
-    Read
-    :param loc:
-    :return:
+    Get names of all files in a directory.
+    :param loc: Directory location to read from.
+    :return: List with names of all text files in loc.
     '''
+
+    files = []
+    for file in os.listdir(path=loc):
+        name = file.split('.')
+        if name[-1] == 'txt':
+            files.append(file)
+
+    print(files)
+
+get_files_in_dir('I:\\MSIT\\IT\\projects\\testing')
 
 def create_log_file(loc):
     '''
@@ -42,5 +54,19 @@ def write_to_file(fd, text):
         return True
     except:
         return False
+
+def read_lines_in_file(file):
+    '''
+    Reads lines in file, and returns them as a list.
+    :param file: File name (Complete path to file)
+    :return: Return list of lines in file.
+    '''
+
+    fd = open(file, 'r')
+    ans = list(fd)
+
+    fd.close()
+
+    return ans
 
 # create_log_file('I:\\')
