@@ -65,6 +65,13 @@ def read_lines_in_file(file):
     fd = open(file, 'r')
     ans = list(fd)
 
+    # ans = []
+    #
+    # for line in fd:
+    #     line.strip()
+    #     if len(line) != 0:
+    #         ans.append(line)
+
     fd.close()
 
     # print(ans)
