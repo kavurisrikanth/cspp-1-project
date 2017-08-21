@@ -21,9 +21,9 @@ def get_files_in_dir(loc):
         if name[-1] == 'txt':
             files.append(file)
 
-    print(files)
-
-get_files_in_dir('I:\\MSIT\\IT\\projects\\testing')
+    # print(files)
+    return files
+# get_files_in_dir('I:\\MSIT\\IT\\projects\\testing')
 
 def create_log_file(loc):
     '''
@@ -67,6 +67,7 @@ def read_lines_in_file(file):
 
     fd.close()
 
+    # print(ans)
     return ans
 
 # create_log_file('I:\\')
