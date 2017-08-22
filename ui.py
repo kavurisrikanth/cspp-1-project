@@ -10,7 +10,8 @@ def main():
 
     cur_dir = os.path.abspath(os.curdir)
 
-    print('\n\n****************** PLAGIARISM DETECTOR ******************')
+    print('\n\n****************** PLAGIARISM DETECTOR ******************', end='')
+    print('\n ******************* SRIKANTH KAVURI *******************')
 
     stop = False
     while not stop:
@@ -20,7 +21,7 @@ def main():
         else:
             print('Invalid.\n')
 
-    if choice == 'n':
+    if choice.lower() == 'n':
         stop = False
         while not stop:
             new_dir = input('Enter new directory: ').strip()
@@ -32,9 +33,11 @@ def main():
 
     print('\n')
     bag_matrix = bag_of_words.bag_driver(cur_dir)
-    lsc_matrix = lsc.lsc_driver(cur_dir)
+
+    # For Bag of words submission on 22-8-17.
+    # lsc_matrix = lsc.lsc_driver(cur_dir)
 
     print(bag_matrix)
-    print(lsc_matrix)
+    # print(lsc_matrix)
 
 main()

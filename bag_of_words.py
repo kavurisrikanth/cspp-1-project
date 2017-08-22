@@ -63,6 +63,9 @@ def bag_driver(cur_dir):
     # Get all files in cur_dir as a list
     file_list = files.get_files_in_dir(cur_dir)
 
+    if len(file_list) == 0:
+        return 'No text files found! Exiting.'
+
     # vecs will be a list of tuples.
     # This is done to make sure that we can keep track of which vector is for
     # which file.
@@ -93,8 +96,8 @@ def bag_driver(cur_dir):
                 else:
                     angles[i].append(100 * (round(get_angle(vecs[i], vecs[j]), 2)))
 
-                if (angles[i][j] >= (1/100) * vecs[i].length) and i != j:
-                    results.append((file_list[i], file_list[j]))
+                if (angles[i][j] >= (70/100) * vecs[i].length) and i != j:
+                    results.append((file_list[i], file_list[j], angles[i][j]))
 
     # for item in angles:
     #     if len(item) == 0:
@@ -102,7 +105,12 @@ def bag_driver(cur_dir):
     # print(angles)
 
     for res in results:
-        print(res[0] + ' and ' + res[1] + ' are similar enough to each other.')
+        print('\'' + res[0] + '\' and \'' + res[1] + '\' are similar enough (' + str(res[2]) + '% similarity) to each other (to suspect plagiarism).')
+
+    print('\nFor your reference:')
+    for ind in range(len(file_list)):
+        print('File number ' + str(ind) + ' corresponds to file ' + file_list[ind])
+    print('\n')
 
     return angles
 
