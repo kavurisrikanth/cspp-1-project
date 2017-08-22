@@ -4,6 +4,7 @@ User interface for the Plagiarism Checker.
 
 import os
 import bag_of_words
+import lsc
 
 def main():
 
@@ -30,6 +31,10 @@ def main():
                 print('Invalid.\n')
 
     print('\n')
-    bag_of_words.bag_driver(cur_dir)
+    bag_matrix = bag_of_words.bag_driver(cur_dir)
+    lsc_matrix = lsc.lsc_driver(cur_dir)
+
+    print(bag_matrix)
+    print(lsc_matrix)
 
 main()

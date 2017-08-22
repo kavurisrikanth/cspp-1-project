@@ -18,7 +18,7 @@ def get_files_in_dir(loc):
     files = []
     for file in os.listdir(path=loc):
         name = file.split('.')
-        if name[-1] == 'txt':
+        if name[-1] == 'txt' and os.path.getsize(loc  + '\\' + file) > 0:
             files.append(file)
 
     # print(files)
@@ -33,7 +33,7 @@ def create_log_file(loc):
     '''
 
     d = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-    print(d)
+    # print(d)
     fd = open(loc + '\\' + '20176001_PlagF_log_' + d + '.txt', 'w')
     fd.close()
 
@@ -63,14 +63,14 @@ def read_lines_in_file(file):
     '''
 
     fd = open(file, 'r')
-    ans = list(fd)
+    # ans = list(fd)
 
-    # ans = []
-    #
-    # for line in fd:
-    #     line.strip()
-    #     if len(line) != 0:
-    #         ans.append(line)
+    ans = []
+
+    for line in fd:
+        line.strip('., \n')
+        if line != '\n':
+            ans.append(line)
 
     fd.close()
 

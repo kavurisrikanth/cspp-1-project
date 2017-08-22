@@ -1,31 +1,21 @@
 import math
 import files
 from collections import Counter
+import common
 
 class MyCounter(Counter):
 
     def __init__(self, dic):
-        self._len = 0
+        self._len = -1
         Counter.__init__(self, dic)
 
     @property
     def length(self):
-        for ele in self.elements():
-            self._len += self.__getitem__(ele)
+        if self._len == -1:
+            self._len = 0
+            for ele in self.elements():
+                self._len += self.__getitem__(ele)
         return self._len
-
-def beautify(word):
-    '''
-    Beautifies a word. Meaning removes all alphanumerics except _ and
-    converts the word to lowercase.
-    :param word: A word, string.
-    :return: Beautified version of word.
-    '''
-
-    NOT_ALLOWED = '~!@#$%^&*((((((+`-=[]\\{}|;\':",./<>?'
-    # print(word)
-    temp = word.lower()
-    return temp.strip(NOT_ALLOWED)
 
 
 def strip_and_split(line):
@@ -46,6 +36,7 @@ def create_vector_for_file(file_path):
     '''
 
     file_lines = files.read_lines_in_file(file_path)
+    # print(file_lines)
 
     words = []
     for line in file_lines:
@@ -53,9 +44,7 @@ def create_vector_for_file(file_path):
         if line != '\n':
            words += line.strip('., \n').split(' ')
 
-
-
-    b_words = list(map(beautify, words))
+    b_words = list(map(common.beautify, words))
     # temp = list(map(strip_and_split, file_lines))
     # b_words = map(beautify, temp)
 
@@ -104,33 +93,19 @@ def bag_driver(cur_dir):
                 else:
                     angles[i].append(100 * (round(get_angle(vecs[i], vecs[j]), 2)))
 
-                if (angles[i][j] >= (70/100) * vecs[i].length) and i != j:
+                if (angles[i][j] >= (1/100) * vecs[i].length) and i != j:
                     results.append((file_list[i], file_list[j]))
 
     # for item in angles:
     #     if len(item) == 0:
     #         angles.remove(item)
-    print(angles)
+    # print(angles)
 
     for res in results:
         print(res[0] + ' and ' + res[1] + ' are similar enough to each other.')
 
-    '''
-    for vec_tup_one in vecs:
-        fname_one = vec_tup_one[0]
-        vec_one = vec_tup_one[1]
+    return angles
 
-        for vec_tup_two in vecs:
-            fname_two = vec_tup_two[0]
-            vec_two = vec_tup_two[1]
-
-            if fname_one != fname_two:
-                try:
-                    angles[fname_one].append((fname_two, get_angle(vec_one, vec_two)))
-                except:
-                    angles[fname_one]
-
-    '''
 
 def get_angle(vec_one, vec_two):
     '''
@@ -140,24 +115,26 @@ def get_angle(vec_one, vec_two):
     :param vec_two: Vector two
     :return: Angle between vectors one and two
     '''
+    try:
+        len_one = 0
+        len_two = 0
 
-    len_one = 0
-    len_two = 0
+        for ele in vec_two:
+            len_two += (vec_two[ele] ** 2)
+        len_two = math.sqrt(len_two)
 
-    for ele in vec_two:
-        len_two += (vec_two[ele] ** 2)
-    len_two = math.sqrt(len_two)
+        dot_prod = 0
+        for ele in vec_one.elements():
+            len_one += (vec_one[ele] ** 2)
+            dot_prod += (vec_one[ele] * vec_two[ele])
+        len_one = math.sqrt(len_one)
 
-    dot_prod = 0
-    for ele in vec_one.elements():
-        len_one += (vec_one[ele] ** 2)
-        dot_prod += (vec_one[ele] * vec_two[ele])
-    len_one = math.sqrt(len_one)
+        # print(dot_prod)
+        # print(len_one * len_two)
 
-    # print(dot_prod)
-    # print(len_one * len_two)
+        return dot_prod/(len_one * len_two)
+    except:
+        return math.pi/2
 
-    return dot_prod/(len_one * len_two)
-
-test_dir = 'I:\\MSIT\\IT\\projects\\testing'
-bag_driver(test_dir)
+# test_dir = 'I:\\MSIT\\IT\\projects\\testing'
+# bag_driver(test_dir)
