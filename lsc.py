@@ -13,11 +13,25 @@ def get_longest_common_substring(str_one, str_two):
     Returns the longest common substring between two strings.
     :param str_one: String one
     :param str_two: String two
-    :return:
+    :return: (length of LCS) * 100 / (len(string one) + len(string two)), rounded to
+              two digits.
+
+    We need the longest common substring between two strings. We're doing this by
+    brute force.
+    The basic concept is to find the length of a subsequence based on the starting
+    word of the subsequence.
+    So, for each word in the first string, we search for the word in the second
+    string. For every match, we store the index of the match.
+    For every matched index, we increment the index and the source index and check
+    for a match in the next word. And we count.
+
+    The maximum count is the length of the Longest Common Subsequence.
+
+    For a bit of optimization, we could store the lengths in a dictionary.
     '''
 
-    print(str_one)
-    print(str_two)
+    # print(str_one)
+    # print(str_two)
 
     list_one = str_one.split(' ')
     list_two = str_two.split(' ')
@@ -25,9 +39,71 @@ def get_longest_common_substring(str_one, str_two):
     max_len = 0
     temp_len = 0
     num_eq = 0
-    ans_list = []
+
+    # List of indices of matches (for a single word)
+    match_list = []
+
+    # Dictionary for memoization...
+    lcs_dic = {}
+
+    for ind_one in range(len(list_one)):
+        match_list.clear()
+
+        try:
+            max_len = lcs_dic[list_one[ind_one]]
+        except:
+            for ind_two in range(len(list_two)):
+
+                word_one = list_one[ind_one]
+                word_two = list_two[ind_two]
+
+                if word_one == word_two:
+                    match_list.append(ind_two)
+
+            source_ind = ind_one
+            # print(match_list)
+            for ind in match_list:
+                target_ind = ind
+                recorded = False
+
+                i = 1
+                num_eq = 1
+                temp_len = len(word_one)
+                # print('\nword one: ' + word_one)
+                # print('temp len init set: ' + str(temp_len))
+
+                while (source_ind + i < len(list_one)) and (target_ind + i < len(list_two)):
+
+                    # print('temp len: ' + str(temp_len))
+                    # print('num eq: ' + str(num_eq))
+                    if list_one[source_ind + i] == list_two[target_ind + i]:
+                        num_eq += 1
+                        temp_len += len(list_one[source_ind + i])
+                    else:
+                        temp_len += num_eq - 1
+                        if temp_len > max_len:
+                            max_len = temp_len
+                            recorded = True
+                            break
+                    i += 1
+
+                # In case the loop exited before the match could be recorded.
+                if not recorded:
+                    # print('temp len, not recorded: ' + str(temp_len))
+                    # print('num eq, not recorded: ' + str(num_eq))
+                    temp_len += num_eq - 1
+                    if temp_len > max_len:
+                        max_len = temp_len
+
+                # print('max len for ind ' + str(ind) + ' for word ' + str(list_two[target_ind]) + ': ' + str(max_len))
+
+            lcs_dic[list_one[ind_one]] = temp_len
+        # finally:
+            # print('max len: ' + str(max_len) + '\n')
+            # print(lcs_dic)
 
     '''
+    BUGGY CODE.
     for word_one in list_one:
 
         for word_two in list_two:
@@ -52,10 +128,11 @@ def get_longest_common_substring(str_one, str_two):
 
     print(ans_list)
     print(len(str_one) + len(str_two))
-    return (max_len) * 100/(len(str_one) + len(str_two))
     '''
+    # print(max_len)
+    return round((max_len) * 100/(len(str_one) + len(str_two)), 2)
 
-    return 0
+
 
 def lsc_driver(cur_loc):
     '''
