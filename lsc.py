@@ -129,12 +129,12 @@ def get_longest_common_substring(str_one, str_two):
     print(ans_list)
     print(len(str_one) + len(str_two))
     '''
-    print(max_len)
-    return round((max_len) * 100/(len(str_one) + len(str_two)), 2)
+    # print(max_len)
+    return round((max_len) * 2 * 100/(len(str_one) + len(str_two)), 2)
 
 
 
-def lsc_driver(cur_loc):
+def lsc_driver(cur_loc, log_file):
     '''
     Driver function for the LSC algorithm.
     :param loc: Directory location.
@@ -142,6 +142,11 @@ def lsc_driver(cur_loc):
     '''
 
     file_list = files.get_files_in_dir(cur_loc)
+
+    if len(file_list) == 0:
+        print('LONGEST COMMON SUBSTRING: No text files found! Exiting.')
+        files.write_to_file(log_file, '\nLONGEST COMMON SUBSTRING: No text files found! Exiting.\n')
+        return []
 
     line_list = []
     for f in file_list:
@@ -154,9 +159,11 @@ def lsc_driver(cur_loc):
         # print(new_line)
 
         new_line_list.append(new_line)
-        # print(new_line_list)
+    print('\n')
+    print(new_line_list)
 
     lsc_matrix = []
+    results = []
     for i in range(len(new_line_list)):
         for j in range(len(new_line_list)):
 
@@ -171,5 +178,15 @@ def lsc_driver(cur_loc):
                     lsc_matrix[i].append(-1)
                 else:
                     lsc_matrix[i].append(get_longest_common_substring(new_line_list[i][0], new_line_list[j][0]))
+
+                if (lsc_matrix[i][j] >= (70)) and i != j:
+                    results.append((file_list[i], file_list[j], lsc_matrix[i][j]))
+
+    print('\n\nLONGEST COMMON SUBSEQUENCE:\n')
+    files.write_to_file(log_file, '\n\nLONGEST COMMON SUBSEQUENCE:\n')
+
+    for res in results:
+        files.write_to_file(log_file, '\'' + res[0] + '\' and \'' + res[1] + '\' are similar enough (' + str(res[2]) + '% similarity) to each other (to suspect plagiarism).\n')
+        print('\'' + res[0] + '\' and \'' + res[1] + '\' are similar enough (' + str(res[2]) + '% similarity) to each other (to suspect plagiarism).')
 
     return lsc_matrix
