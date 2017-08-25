@@ -40,7 +40,7 @@ For any other input, the program will ask you again.
 
 BAG OF WORDS EXPLANATION:
 This algorithm proceeds as follows:
-1. Read the files.
+1. Read the files. All of the words in the file are arranged into a single line.
 2. Construct a Counter dictionary (also called a vector in this context) from the lines in the files.
 3. Calculate the document distance for every two files.
 4. Construct a 2-dimensional array based on the document distances.
@@ -64,3 +64,20 @@ File number 1 corresponds to file text.txt
 then, in the matrix (arr), arr[0][1] would be the bag of words result of comparing File 0 (abc.txt) with File 1 (text.txt).
 
 If the percentage distance between two documents is greater than or equal to 70 (design choice), then a printout is given saying that the two files are similar enough to each other (to suspect plagiarism).
+
+
+
+LONGEST COMMON SUBSEQUENCE:
+This algorithm proceeds as follows:
+1. Read the files.
+2. For each pair of strings, find the longest common substring.
+3. The percentage match is calculated as
+%match = (length of LCS) * 2 * 100 / (length of string one + length of string two)
+
+Just like for Bag of Words, a 2-D matrix is returned.
+Also, the percentages that are above 70 are displayed as similar enough to warrant plagiarism.
+
+
+LOG FILE:
+Every time you run the program, you are asked whether or not logging should be enabled for this program. If you choose to enable logging, a log file is created in the location that you picked at the start of the program.
+Everything that is printed is also written to this file.

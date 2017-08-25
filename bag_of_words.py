@@ -4,6 +4,10 @@ from collections import Counter
 import common
 
 class MyCounter(Counter):
+    """
+    MyCounter class. A small extension of the Counter class.
+    Adds the ability to count the number of words in the dictionary.
+    """
 
     def __init__(self, dic):
         self._len = -1
@@ -12,6 +16,7 @@ class MyCounter(Counter):
     @property
     def length(self):
         if self._len == -1:
+            # Only doing this once.
             self._len = 0
             for ele in self.elements():
                 self._len += self.__getitem__(ele)
@@ -49,11 +54,11 @@ def create_vector_for_file(file_path):
     # b_words = map(beautify, temp)
 
     # print(words)
-    # print(b_words)
+    print(b_words)
     vector = MyCounter(b_words)
     return vector
 
-def bag_driver(cur_dir):
+def bag_driver(cur_dir, log_file):
     '''
     Driver program for bag of words.
     :param cur_dir: Current working directory. This is where the files are.
@@ -64,7 +69,9 @@ def bag_driver(cur_dir):
     file_list = files.get_files_in_dir(cur_dir)
 
     if len(file_list) == 0:
-        return 'No text files found! Exiting.'
+        print('BAG OF WORDS: No text files found! Exiting.')
+        files.write_to_file(log_file, '\nBAG OF WORDS: No text files found! Exiting.\n')
+        return []
 
     # vecs will be a list of tuples.
     # This is done to make sure that we can keep track of which vector is for
@@ -80,13 +87,17 @@ def bag_driver(cur_dir):
     angles = []
     results = []
 
+    # Get the angle between every pair of vectors.
     for i in range(len(file_list)):
         for j in range(len(file_list)):
             # print(angles)
 
+            # Create the list at position i.
             if i == len(angles):
                 angles.append([])
+
             try:
+                # Angle between A and B is the same as angle between B and A.
                 angles[i].append(angles[j][i])
             except:
 
@@ -94,9 +105,12 @@ def bag_driver(cur_dir):
                     # Comparing a file with itself makes no sense.
                     angles[i].append(-1)
                 else:
+                    # Calculate angle
                     angles[i].append(100 * (round(get_angle(vecs[i], vecs[j]), 2)))
 
-                if (angles[i][j] >= (70/100) * vecs[i].length) and i != j:
+                # Similar enough to suspect plagiarism?
+                if (angles[i][j] >= 70) and i != j:
+                    # print(angles[i][j], vecs[i].length)
                     results.append((file_list[i], file_list[j], angles[i][j]))
 
     # for item in angles:
@@ -104,13 +118,24 @@ def bag_driver(cur_dir):
     #         angles.remove(item)
     # print(angles)
 
-    for res in results:
-        print('\'' + res[0] + '\' and \'' + res[1] + '\' are similar enough (' + str(res[2]) + '% similarity) to each other (to suspect plagiarism).')
-
+    # Printouts
     print('\nFor your reference:')
     for ind in range(len(file_list)):
         print('File number ' + str(ind) + ' corresponds to file ' + file_list[ind])
     print('\n')
+
+    files.write_to_file(log_file, '\nFor your reference:\n')
+    for ind in range(len(file_list)):
+        files.write_to_file(log_file, 'File number ' + str(ind) + ' corresponds to file ' + file_list[ind] + '\n')
+    files.write_to_file(log_file, '\n')
+    files.write_to_file(log_file, '\n\nBAG OF WORDS:\n')
+
+    print('\n\nBAG OF WORDS:\n')
+
+    for res in results:
+        files.write_to_file(log_file, '\'' + res[0] + '\' and \'' + res[1] + '\' are similar enough (' + str(res[2]) + '% similarity) to each other (to suspect plagiarism).\n')
+        print('\'' + res[0] + '\' and \'' + res[1] + '\' are similar enough (' + str(res[2]) + '% similarity) to each other (to suspect plagiarism).')
+
 
     return angles
 

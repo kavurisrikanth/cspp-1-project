@@ -34,21 +34,25 @@ def create_log_file(loc):
 
     d = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
     # print(d)
-    fd = open(loc + '\\' + '20176001_PlagF_log_' + d + '.txt', 'w')
+    file_name = loc + '\\' + '20176001_PlagF_log_' + d
+    fd = open(file_name, 'w')
+    fd.write('Log file for Plagiarism detector.\n')
+    fd.write(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
     fd.close()
 
-    return fd
+    return file_name
 
-def write_to_file(fd, text):
+def write_to_file(file, text):
     '''
     Writes text to file.
-    :param fd: File descriptor
+    :param file: File path (FULL path)
     :param text: Text to write.
     :return: True if success, False if not.
     '''
 
+    # Writes to a file if it exists.
     try:
-        open(fd, 'a')
+        fd = open(file, 'a')
         fd.write(text)
         fd.close()
         return True
@@ -59,22 +63,23 @@ def read_lines_in_file(file):
     '''
     Reads lines in file, and returns them as a list.
     :param file: File name (Complete path to file)
-    :return: Return list of lines in file.
+    :return: Return list of all words in the file arranged into a single line.
     '''
 
     fd = open(file, 'r')
     # ans = list(fd)
 
-    ans = []
-
+    # ans = []
+    ans = ''
     for line in fd:
         line.strip('., \n')
         if line != '\n':
-            ans.append(line)
+            # ans.append(line)
+            ans += line + ' '
 
     fd.close()
 
     # print(ans)
-    return ans
+    return [ans.strip()]
 
 # create_log_file('I:\\')

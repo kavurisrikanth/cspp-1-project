@@ -18,3 +18,22 @@ def beautify(word):
     # return temp.strip(NOT_ALLOWED)
 
     return re.sub('[^a-z0-9_ ]+', '', word.lower())
+
+def proceed(text):
+    '''
+    Gets an input from user.
+    Validates user's choice and returns properly if the choice is yes or no (case insensitive)
+    :param text:
+    :return:
+    '''
+
+    stop = False
+    while not stop:
+        choice = input(text).strip()
+        if choice.lower() == 'y' or choice.lower() == 'n':
+            stop = True
+        else:
+            # Validation
+            print('Invalid.\n')
+
+    return choice.lower() == 'y'
